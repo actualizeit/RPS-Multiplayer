@@ -9,10 +9,64 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" src="assets/css/style.css">
    
-    <title>Hello, world!</title>
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
+    <!-- Jumbotron Title -->
+    <div class="jumbotron">
+        <h1 class="text-center">Rock, Paper, Scissors</h1>
+        <h3 class="text-center">"When you really want someone else to do it."</h3>
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="text-center">
+                Wait for an opponent and click "r", "p", or "s"</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="text-center card-header" id="directions">
+              Choose your destiny
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Current Product -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3 class="">
+                    <strong>Your Choice:</strong>
+                    <span id="choice"></span>
+                  </h3>
+                  <h3 class="">
+                    <strong>Number of Wins:</strong>
+                    <span id="wins"></span>
+                  </h3>
+                  <h3 class="">
+                    <strong>Number of Losses:</strong>
+                    <span id="losses"></span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Make Your Bid -->
+
+  
+    </div>
+  
+    <!-- JavaScript -->
+    <script src="logic.js"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

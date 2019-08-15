@@ -44,9 +44,13 @@
   connectionsRef.on("value", function(snap) {
     if(playerNumber == 0){
     $("#playerNumber").text(snap.numChildren());
-    $("#oppChoice").text("Waiting for an Opponent")
     playerNumber = snap.numChildren()
     console.log(playerNumber)
+    }
+    if(snap.numChildren() < 2){    
+    $("#oppChoice").text("Waiting for an Opponent")
+    }else{
+    $("#oppChoice").text("Someone is rdy to rock lol, hit 'r', 'p', or 's'")
     }
   });
 
@@ -140,8 +144,7 @@
                 $("#ties").text(localTies);
             }
         }
-    }
-    else if(choices.includes(p1c)) {
+    }else if(choices.includes(p1c)) {
         if(playerNumber == 1){
             $("#choice").text(snapshot.val().playerOneChoice);
             $("#oppChoice").text("Waiting for Opponent to Choose");
@@ -156,11 +159,10 @@
         $("#choice").text(snapshot.val().playerTwoChoice);
         $("#oppChoice").text("Waiting for Opponent to Choose");
         }
-    }else{
+    }else if (connectedRef.numChildren > 1){
         $("#choice").text("Choose your Destiny!");
         $("#oppChoice").text("Waiting for Opponent to Choose");
     }
-        // change the HTML to reflect the newly updated local values (most recent information from firebase)
 
     // If any errors are experienced, log them to console.
   }, function(errorObject) {

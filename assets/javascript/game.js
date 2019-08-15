@@ -44,6 +44,7 @@
   connectionsRef.on("value", function(snap) {
     if(playerNumber == 0){
     $("#playerNumber").text(snap.numChildren());
+    $("#oppChoice").text("Waiting for an Opponent")
     playerNumber = snap.numChildren()
     console.log(playerNumber)
     }
@@ -55,7 +56,6 @@
   var wins = 0
   var losses = 0 
   var ties = 0
-
   var playerOneChoice = ""
   var playerTwoChoice = ""
   var blank = ""
@@ -71,8 +71,8 @@
     $("#connected").text(snap.numChildren());
     if(snap.numChildren() < 3){
         database.ref("/gameInfo").set({
-            // playerOneChoice: playerOneChoice,
-            // playerTwoChoice: playerTwoChoice,
+            playerOneChoice: playerOneChoice,
+            playerTwoChoice: playerTwoChoice,
             playerOneWins: playerOneWins,
             playerTwoWins: playerTwoWins,
             ties: ties,
@@ -83,26 +83,13 @@
 
 
   database.ref("/gameInfo").on("value", function(snapshot) {
-    var p1c = snapshot.child("playerOneChoice")
-    var p2c = snapshot.child("playerTwoChoice")
+    var p1c = snapshot.child("playerOneChoice").val()
+    var p2c = snapshot.child("playerTwoChoice").val()
+
     // If Firebase has a highPrice and highBidder stored (first case)
-    if (choices.contains(p1c.val()) && choices.contains(p2c.val())) {
+    if (choices.includes(p1c) && choices.includes(p2c)){
 
       // Set the local variables for the player choices equal to the stored values in firebase.
-
-        if(playerNumber == 1){
-        playerChoice = snapshot.val().playerOneChoice;
-        oppChoice = snapshot.val().playerTwoChoice;
-        wins = snapshot.val().playerOneWins;
-        losses = snapshot.val().playerTwoWins;
-        ties = snapshot.val().ties;
-        }else{
-            playerChoice = snapshot.val().playerTwoChoice;
-            oppChoice = snapshot.val().playerOneChoice;
-            wins = snapshot.val().playerTwoWins;
-            losses = snapshot.val().playerOneWins;
-            ties = snapshot.val().ties;
-            }
         
         if ((snapshot.val().playerOneChoice === "r" && snapshot.val().playerTwoChoice === "s") ||
         (snapshot.val().playerOneChoice === "s" && snapshot.val().playerTwoChoice === "p") || 
@@ -127,6 +114,19 @@
                 playerOneChoice: blank,
                 playerTwoChoice: blank,
                     });
+            if(playerNumber == 1){
+                playerChoice = snapshot.val().playerOneChoice;
+                oppChoice = snapshot.val().playerTwoChoice;
+                wins = snapshot.val().playerOneWins;
+                losses = snapshot.val().playerTwoWins;
+                ties = snapshot.val().ties;
+            }else{
+                playerChoice = snapshot.val().playerTwoChoice;
+                oppChoice = snapshot.val().playerOneChoice;
+                wins = snapshot.val().playerTwoWins;
+                losses = snapshot.val().playerOneWins;
+                ties = snapshot.val().ties;
+            }
         }
       // change the HTML to reflect the newly updated local values (most recent information from firebase)
       $("#choice").text(playerChoice);
@@ -153,7 +153,7 @@
         }
     }else{
         $("#choice").text("Choose your Destiny!");
-        $("#oppChoice").text("Your Opponent has Chosen!");
+        $("#oppChoice").text("Waiting for Opponent to Choose");
     }
   
     // If any errors are experienced, log them to console.

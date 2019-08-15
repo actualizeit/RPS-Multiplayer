@@ -40,6 +40,15 @@
   });
 
   var playerNumber = 0
+
+  connectionsRef.on("value", function(snap) {
+    if(playerNumber == 0){
+    $("#playerNumber").text(snap.numChildren());
+    playerNumber = snap.numChildren()
+    console.log(playerNumber)
+    }
+  });
+
   var choices = ["r", "p", "s"];
   var playerChoice = ""
   var oppChoice = ""
@@ -59,10 +68,10 @@
     // Display the viewer count in the html.
     // The number of online users is the number of children in the connections list.
     $("#connected").text(snap.numChildren());
-    playerNumber = snap.numChildren()
     console.log(playerNumber)
   });
 
+ 
 
   //Initial Values
 
@@ -139,7 +148,7 @@ document.onkeyup = function(event) {
             };
 
         }else{
-            database.ref("/playerTwoChoice").set({
+            database.ref("/gameInfo").set({
                 playerTwoChoice: userGuess,
             });
         }
@@ -153,12 +162,6 @@ document.onkeyup = function(event) {
         } else {
         losses++;
         }
-
-        database.ref("/winsLosses").set({
-        ties: ties,
-        playerOneWins: playerOneWins,
-        playerTwoWins: playerTwoWins,
-        });
 
         // Hide the directions
 

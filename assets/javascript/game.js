@@ -58,9 +58,10 @@
 
   var playerOneChoice = ""
   var playerTwoChoice = ""
+  var blank = ""
+
   var playerOneWins = 0
   var playerTwoWins = 0
-
 
   // When first loaded or when the connections list changes...
   connectionsRef.on("value", function(snap) {
@@ -68,36 +69,65 @@
     // Display the viewer count in the html.
     // The number of online users is the number of children in the connections list.
     $("#connected").text(snap.numChildren());
+    if(snap.numChildren() < 3){
+        database.ref("/gameInfo").set({
+            // playerOneChoice: playerOneChoice,
+            // playerTwoChoice: playerTwoChoice,
+            playerOneWins: playerOneWins,
+            playerTwoWins: playerTwoWins,
+            ties: ties,
+        });
+    }
     console.log(playerNumber)
   });
 
- 
-
-  //Initial Values
-
-
 
   database.ref("/gameInfo").on("value", function(snapshot) {
-
+    var p1c = snapshot.child("playerOneChoice")
+    var p2c = snapshot.child("playerTwoChoice")
     // If Firebase has a highPrice and highBidder stored (first case)
-    if (snapshot.child("playerOneChoice").exists() && snapshot.child("playerTwoChoice").exists()) {
-  
+    if (choices.contains(p1c.val()) && choices.contains(p2c.val())) {
+
       // Set the local variables for the player choices equal to the stored values in firebase.
 
-      if(playerNumber == 1){
-      playerChoice = snapshot.val().playerOneChoice;
-      oppChoice = snapshot.val().playerTwoChoice;
-      wins = snapshot.val().playerOneWins;
-      losses = snapshot.val().playerTwoWins;
-      ties = snapshot.val().ties;
-      }else{
-        playerChoice = snapshot.val().playerTwoChoice;
-        oppChoice = snapshot.val().playerOneChoice;
-        wins = snapshot.val().playerTwoWins;
-        losses = snapshot.val().playerOneWins;
+        if(playerNumber == 1){
+        playerChoice = snapshot.val().playerOneChoice;
+        oppChoice = snapshot.val().playerTwoChoice;
+        wins = snapshot.val().playerOneWins;
+        losses = snapshot.val().playerTwoWins;
         ties = snapshot.val().ties;
+        }else{
+            playerChoice = snapshot.val().playerTwoChoice;
+            oppChoice = snapshot.val().playerOneChoice;
+            wins = snapshot.val().playerTwoWins;
+            losses = snapshot.val().playerOneWins;
+            ties = snapshot.val().ties;
+            }
+        
+        if ((snapshot.val().playerOneChoice === "r" && snapshot.val().playerTwoChoice === "s") ||
+        (snapshot.val().playerOneChoice === "s" && snapshot.val().playerTwoChoice === "p") || 
+        (snapshot.val().playerOneChoice === "p" && snapshot.val().playerTwoChoice === "r")) {
+            playerOneWins++;
+            database.ref("/gameInfo").update({
+                playerOneWins: playerOneWins,
+                playerOneChoice: blank,
+                playerTwoChoice: blank,
+                    });
+        } else if (snapshot.val().playerOneChoice === snapshot.val().playerTwoChoice) {
+            ties++;
+            database.ref("/gameInfo").update({
+                ties: ties,
+                playerOneChoice: blank,
+                playerTwoChoice: blank,
+                    });
+        } else {
+            playerTwoWins++;
+            database.ref("/gameInfo").update({
+                playerTwoWins: playerTwoWins,
+                playerOneChoice: blank,
+                playerTwoChoice: blank,
+                    });
         }
-
       // change the HTML to reflect the newly updated local values (most recent information from firebase)
       $("#choice").text(playerChoice);
       $("#oppChoice").text(oppChoice);
@@ -142,26 +172,18 @@ document.onkeyup = function(event) {
 
         // Save the new price in Firebase
         if(playerNumber == 1){
-            database.ref("/gameInfo").set({
+            database.ref("/gameInfo").update({
                 playerOneChoice: userGuess,
-                });
-            };
-
-        }else{
-            database.ref("/gameInfo").set({
+                    });
+                    }
+        if(playerNumber == 2){
+            database.ref("/gameInfo").update({
                 playerTwoChoice: userGuess,
             });
         }
+    }
+}
 
-        if ((userGuess === "r" && playerTwoChoice === "s") ||
-        (userGuess === "s" && playerTwoChoice === "p") || 
-        (userGuess === "p" && playerTwoChoice === "r")) {
-        wins++;
-        } else if (userGuess === playerTwoChoice) {
-        ties++;
-        } else {
-        losses++;
-        }
 
         // Hide the directions
 
@@ -176,11 +198,13 @@ document.onkeyup = function(event) {
     //   lossesText.textContent = "losses: " + losses;
     //   tiesText.textContent = "ties: " + ties;
 
-//   database.ref("/gameInfo").set({
-//     playerOneChoice: playerOneChoice,
-//     playerTwoChoice: playerTwoChoice,
-//     playerOneWins: playerOneWins,
-//     playerTwoWins: playerTwoWins,
-//     ties: ties,
-//   });
-    }
+
+ 
+
+    // database.ref("/gameInfo").set({
+    //     playerOneChoice: userGuess,
+    //     playerTwoChoice: playerTwoChoice,
+    //     playerOneWins: playerOneWins,
+    //     playerTwoWins: playerTwoWins,
+    //     ties: ties,
+    //         });

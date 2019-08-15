@@ -55,13 +55,14 @@
   var oppChoice = ""
   var wins = 0
   var losses = 0 
-  var ties = 0
+  var LocalTies = 0
   var playerOneChoice = ""
   var playerTwoChoice = ""
   var blank = ""
 
   var playerOneWins = 0
   var playerTwoWins = 0
+  var ties = 0
 
   // When first loaded or when the connections list changes...
   connectionsRef.on("value", function(snap) {
@@ -92,9 +93,9 @@
 
       // Set the local variables for the player choices equal to the stored values in firebase.
         
-        if ((snapshot.val().playerOneChoice === "r" && snapshot.val().playerTwoChoice === "s") ||
-        (snapshot.val().playerOneChoice === "s" && snapshot.val().playerTwoChoice === "p") || 
-        (snapshot.val().playerOneChoice === "p" && snapshot.val().playerTwoChoice === "r")) {
+        if ((p1c === "r" && p2c === "s") ||
+        (p1c === "s" && p2c === "p") || 
+        (p1c === "p" && p2c === "r")) {
             playerOneWins++;
             database.ref("/gameInfo").update({
                 playerOneWins: playerOneWins,
@@ -107,32 +108,36 @@
                 ties: ties,
                 playerOneChoice: blank,
                 playerTwoChoice: blank,
-                    });
+            });
+            localTies = snapshot.val().ties;
+            $("#wins").text(wins);
+            $("#losses").text(losses);
+            $("#ties").text(localTies);
         } else {
             playerTwoWins++;
             database.ref("/gameInfo").update({
                 playerTwoWins: playerTwoWins,
                 playerOneChoice: blank,
                 playerTwoChoice: blank,
-                    });
+            });
             if(playerNumber == 1){
                 playerChoice = snapshot.val().playerOneChoice;
                 oppChoice = snapshot.val().playerTwoChoice;
                 wins = snapshot.val().playerOneWins;
                 losses = snapshot.val().playerTwoWins;
-                ties = snapshot.val().ties;
+                localTies = snapshot.val().ties;
                 $("#wins").text(wins);
                 $("#losses").text(losses);
-                $("#ties").text(ties);
+                $("#ties").text(localTies);
             }else{
                 playerChoice = snapshot.val().playerTwoChoice;
                 oppChoice = snapshot.val().playerOneChoice;
                 wins = snapshot.val().playerTwoWins;
                 losses = snapshot.val().playerOneWins;
-                ties = snapshot.val().ties;
+                localTies = snapshot.val().ties;
                 $("#wins").text(wins);
                 $("#losses").text(losses);
-                $("#ties").text(ties);
+                $("#ties").text(localTies);
             }
         }
     }
@@ -189,23 +194,3 @@ document.onkeyup = function(event) {
         // Hide the directions
 
         // directionsText.textContent = "";
-
-        // Display the user and computer guesses, and wins/losses/ties.
-
-
-    //   userChoiceText.textContent = "You chose: " + userGuess;
-    //   computerChoiceText.textContent = "The computer chose: " + computerGuess;
-    //   winsText.textContent = "wins: " + wins;
-    //   lossesText.textContent = "losses: " + losses;
-    //   tiesText.textContent = "ties: " + ties;
-
-
- 
-
-    // database.ref("/gameInfo").set({
-    //     playerOneChoice: userGuess,
-    //     playerTwoChoice: playerTwoChoice,
-    //     playerOneWins: playerOneWins,
-    //     playerTwoWins: playerTwoWins,
-    //     ties: ties,
-    //         });

@@ -86,6 +86,7 @@
     var p1c = snapshot.child("playerOneChoice").val()
     var p2c = snapshot.child("playerTwoChoice").val()
 
+
     // If Firebase has a highPrice and highBidder stored (first case)
     if (choices.includes(p1c) && choices.includes(p2c)){
 
@@ -120,33 +121,32 @@
                 wins = snapshot.val().playerOneWins;
                 losses = snapshot.val().playerTwoWins;
                 ties = snapshot.val().ties;
+                $("#wins").text(wins);
+                $("#losses").text(losses);
+                $("#ties").text(ties);
             }else{
                 playerChoice = snapshot.val().playerTwoChoice;
                 oppChoice = snapshot.val().playerOneChoice;
                 wins = snapshot.val().playerTwoWins;
                 losses = snapshot.val().playerOneWins;
                 ties = snapshot.val().ties;
+                $("#wins").text(wins);
+                $("#losses").text(losses);
+                $("#ties").text(ties);
             }
         }
-      // change the HTML to reflect the newly updated local values (most recent information from firebase)
-      $("#choice").text(playerChoice);
-      $("#oppChoice").text(oppChoice);
-      $("#wins").text(wins);
-      $("#losses").text(losses);
-      $("#ties").text(ties);
     }
-  
-    // Else Firebase doesn't have a highPrice/highBidder, so use the initial local values.
-    else if(snapshot.child("playerOneChoice").exists()) {
+    else if(choices.includes(p1c)) {
         if(playerNumber == 1){
             $("#choice").text(snapshot.val().playerOneChoice);
             $("#oppChoice").text("Waiting for Opponent to Choose");
+
       // Change the HTML to reflect the local value in firebase
         }else{
             $("#choice").text("Choose your Destiny!");
             $("#oppChoice").text("Your Opponent has Chosen!");
         }
-    }else if(snapshot.child("playerTwoChoice").exists()) {
+    }else if(choices.includes(p2c)) {
         if(playerNumber == 2){
         $("#choice").text(snapshot.val().playerTwoChoice);
         $("#oppChoice").text("Waiting for Opponent to Choose");
@@ -155,7 +155,8 @@
         $("#choice").text("Choose your Destiny!");
         $("#oppChoice").text("Waiting for Opponent to Choose");
     }
-  
+        // change the HTML to reflect the newly updated local values (most recent information from firebase)
+
     // If any errors are experienced, log them to console.
   }, function(errorObject) {
     console.log("The read failed: " + errorObject.code);

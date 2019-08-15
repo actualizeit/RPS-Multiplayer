@@ -22,7 +22,6 @@
   // every time the client's connection state changes.
   // '.info/connected' is a boolean value, true if the client is connected and false if they are not.
   var connectedRef = database.ref(".info/connected");
-  var playerNumber = 0
 // When the client's connection state changes...
   connectedRef.on("value", function(snap) {
 
@@ -31,27 +30,28 @@
   
       // Add user to the connections list.
       var con = connectionsRef.push(true);
+      // Add a variable to hold the game info
+      var gg = database.ref("/gameInfo")
 
-      // Remove user from the connection list when they disconnect.
+      // Remove user from the connection list and elete game info when someone disconnects.
       con.onDisconnect().remove();
+      gg.onDisconnect().remove();
     }
   });
-  
-  var playersGuessed =
+
+  var playerNumber = 0
   var choices = ["r", "p", "s"];
+  var playerChoice = ""
+  var oppChoice = ""
+  var wins = 0
+  var losses = 0 
+  var ties = 0
+
   var playerOneChoice = ""
   var playerTwoChoice = ""
   var playerOneWins = 0
   var playerTwoWins = 0
-  var ties = 0
 
-  database.ref("/gameInfo").set({
-    playerOneChoice: playerOneChoice,
-    playerTwoChoice: playerTwoChoice,
-    playerOneWins: playerOneWins,
-    playerTwoWins: playerTwoWins,
-    ties: ties,
-  });
 
   // When first loaded or when the connections list changes...
   connectionsRef.on("value", function(snap) {
@@ -68,35 +68,53 @@
 
 
 
-  database.ref("/bidderData").on("value", function(snapshot) {
+  database.ref("/gameInfo").on("value", function(snapshot) {
 
     // If Firebase has a highPrice and highBidder stored (first case)
-    if (snapshot.child("highBidder").exists() && snapshot.child("highPrice").exists()) {
+    if (snapshot.child("playerOneChoice").exists() && snapshot.child("playerTwoChoice").exists()) {
   
-      // Set the local variables for highBidder equal to the stored values in firebase.
-      highBidder = snapshot.val().highBidder;
-      highPrice = parseInt(snapshot.val().highPrice);
-  
+      // Set the local variables for the player choices equal to the stored values in firebase.
+
+      if(playerNumber == 1){
+      playerChoice = snapshot.val().playerOneChoice;
+      oppChoice = snapshot.val().playerTwoChoice;
+      wins = snapshot.val().playerOneWins;
+      losses = snapshot.val().playerTwoWins;
+      ties = snapshot.val().ties;
+      }else{
+        playerChoice = snapshot.val().playerTwoChoice;
+        oppChoice = snapshot.val().playerOneChoice;
+        wins = snapshot.val().playerTwoWins;
+        losses = snapshot.val().playerOneWins;
+        ties = snapshot.val().ties;
+        }
+
       // change the HTML to reflect the newly updated local values (most recent information from firebase)
-      $("#highest-bidder").text(snapshot.val().highBidder);
-      $("#highest-price").text("$" + snapshot.val().highPrice);
-  
-      // Print the local data to the console.
-      console.log(snapshot.val().highBidder);
-      console.log(snapshot.val().highPrice);
+      $("#choice").text(playerChoice);
+      $("#oppChoice").text(oppChoice);
+      $("#wins").text(wins);
+      $("#losses").text(losses);
+      $("#ties").text(ties);
     }
   
     // Else Firebase doesn't have a highPrice/highBidder, so use the initial local values.
-    else {
-  
+    else if(snapshot.child("playerOneChoice").exists()) {
+        if(playerNumber == 1){
+            $("#choice").text(snapshot.val().playerOneChoice);
+            $("#oppChoice").text("Waiting for Opponent to Choose");
       // Change the HTML to reflect the local value in firebase
-      $("#highest-bidder").text(highBidder);
-      $("#highest-price").text("$" + highPrice);
-  
-      // Print the local data to the console.
-      console.log("local High Price");
-      console.log(highBidder);
-      console.log(highPrice);
+        }else{
+            $("#choice").text("Choose your Destiny!");
+            $("#oppChoice").text("Your Opponent has Chosen!");
+        }
+    }else if(snapshot.child("playerTwoChoice").exists()) {
+        if(playerNumber == 2){
+        $("#choice").text(snapshot.val().playerTwoChoice);
+        $("#oppChoice").text("Waiting for Opponent to Choose");
+        }
+    }else{
+        $("#choice").text("Choose your Destiny!");
+        $("#oppChoice").text("Your Opponent has Chosen!");
     }
   
     // If any errors are experienced, log them to console.
@@ -104,97 +122,62 @@
     console.log("The read failed: " + errorObject.code);
   });
   
-  // --------------------------------------------------------------
-  // Whenever a user clicks the click button
-  $("#submit-bid").on("click", function(event) {
-    event.preventDefault();
-  
-    // Get the input values
-    var bidderName = $("#bidder-name").val().trim();
-    var bidderPrice = parseInt($("#bidder-price").val().trim());
-  
-    // Log the Bidder and Price (Even if not the highest)
-    console.log(bidderName);
-    console.log(bidderPrice);
-  
-    if (bidderPrice > highPrice) {
-  
-      // Alert
-      alert("You are now the highest bidder.");
-  
-      // Save the new price in Firebase
-      database.ref("/playerChoice").set({
-        highBidder: bidderName,
-        highPrice: bidderPrice
-      });
-  
-      // Log the new High Price
-      console.log("New High Price!");
-      console.log(bidderName);
-      console.log(bidderPrice);
-  
-      // Store the new high price and bidder name as a local variable (could have also used the Firebase variable)
-      highBidder = bidderName;
-      highPrice = parseInt(bidderPrice);
-  
-      // Change the HTML to reflect the new high price and bidder
-      $("#highest-bidder").text(bidderName);
-      $("#highest-price").text("$" + bidderPrice);
-    } else {
-      // Alert
-      alert("Sorry that bid is too low. Try again.");
-    }
-  });
-  
-    document.onkeyup = function(event) {
+document.onkeyup = function(event) {
 
-        // Determines which key was pressed.
-        var userGuess = event.key;
-     
-        // This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
-        if ((userGuess === "r") || (userGuess === "p") || (userGuess === "s")) {
-
+    // Determines which key was pressed.
+    var userGuess = event.key;
     
-    
-            // Save the new price in Firebase
-            if(playerNumber == 1){
-                database.ref("/playerOneChoice").set({
-                playerChoice: playerChoice,
+    // This logic determines the outcome of the game (win/loss/tie), and increments the appropriate number
+    if ((userGuess === "r") || (userGuess === "p") || (userGuess === "s")) {
+
+
+        // Save the new price in Firebase
+        if(playerNumber == 1){
+            database.ref("/gameInfo").set({
+                playerOneChoice: userGuess,
                 });
+            };
 
-            }else{
-                database.ref("/playerTwoChoice").set({
-                playerChoice: playerChoice,
-                });
-            }
-
-            highBidder = snapshot.val().playerOneChoice;
-            highPrice = parseInt(snapshot.val().highPrice);
-
-          if ((userGuess === "r" && playerTwoChoice === "s") ||
-            (userGuess === "s" && playerTwoChoice === "p") || 
-            (userGuess === "p" && playerTwoChoice === "r")) {
-            wins++;
-          } else if (userGuess === playerTwoChoice) {
-            ties++;
-          } else {
-            losses++;
-          }
-
-          database.ref("/winsLosses").set({
-            ties: ties,
-            playerOneWins: playerOneWins,
-            playerTwoWins: playerTwoWins,
-          });
-
-          // Hide the directions
-          directionsText.textContent = "";
-  
-          // Display the user and computer guesses, and wins/losses/ties.
-          userChoiceText.textContent = "You chose: " + userGuess;
-          computerChoiceText.textContent = "The computer chose: " + computerGuess;
-          winsText.textContent = "wins: " + wins;
-          lossesText.textContent = "losses: " + losses;
-          tiesText.textContent = "ties: " + ties;
+        }else{
+            database.ref("/playerTwoChoice").set({
+                playerTwoChoice: userGuess,
+            });
         }
-      };
+
+        if ((userGuess === "r" && playerTwoChoice === "s") ||
+        (userGuess === "s" && playerTwoChoice === "p") || 
+        (userGuess === "p" && playerTwoChoice === "r")) {
+        wins++;
+        } else if (userGuess === playerTwoChoice) {
+        ties++;
+        } else {
+        losses++;
+        }
+
+        database.ref("/winsLosses").set({
+        ties: ties,
+        playerOneWins: playerOneWins,
+        playerTwoWins: playerTwoWins,
+        });
+
+        // Hide the directions
+
+        // directionsText.textContent = "";
+
+        // Display the user and computer guesses, and wins/losses/ties.
+
+
+    //   userChoiceText.textContent = "You chose: " + userGuess;
+    //   computerChoiceText.textContent = "The computer chose: " + computerGuess;
+    //   winsText.textContent = "wins: " + wins;
+    //   lossesText.textContent = "losses: " + losses;
+    //   tiesText.textContent = "ties: " + ties;
+
+//   database.ref("/gameInfo").set({
+//     playerOneChoice: playerOneChoice,
+//     playerTwoChoice: playerTwoChoice,
+//     playerOneWins: playerOneWins,
+//     playerTwoWins: playerTwoWins,
+//     ties: ties,
+//   });
+    }

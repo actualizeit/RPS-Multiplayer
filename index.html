@@ -12,67 +12,65 @@
    <body>
     <!-- Jumbotron Title -->
     <div class="jumbotron">
-        <h1 class="text-center">Rock, Paper, Scissors</h1>
-        <h3 class="text-center">"When you really want someone else to do it."</h3>
-      </div>
-  
-      <div class="row">
-        <div class="col-lg-12">
-              <h3 class="text-center" id="directions">
-                Wait for an opponent and click a button below to see who the RPS gods prefer</h3>
-                <h3 class="text-center">
-                  <strong>You are Player Number:</strong>
-                  <span id="playerNumber"></span>
-                </h3>
-                <h3 class="text-center">
-                    <span id="choice"></span>
-                  </h3>
-                  <h3 class="text-center">
-                    <span id="oppChoice"></span>
-                  </h3>
-            </div>
-      </div>
-      <!-- Current Product -->
-      <div class="row">
-        <div class="col-lg-12 text-center">
-            <button type="button" id="rock" class="btn btn-secondary align-center">
-                <img src="assets/images/rock.jpg">
-            </button>
-            <button type="button" id="paper" class="btn btn-secondary align-center">
-                <img src="assets/images/paper.jpg">
-            </button>
-            <button type="button" id="scissors" class="btn btn-secondary align-center">
-                <img src="assets/images/scissors.jpg">
-            </button>
-              <div class="row">
-                <div class="col-lg-12">
-
-                  <h3 class="">
-                    <span>Number of Wins:</span>
-                    <span id="wins"></span>
-                  </h3>
-                  <h3 class="">
-                    <span>Number of Losses:</span>
-                    <span id="losses"></span>
-                  </h3>
-                  <h3 class="">
-                    <span>Number of Ties:</span>
-                    <span id="ties"></span>
-                  </h3>
-
-                  <h3 class="">
-                    <span>Users Connected:</span>
-                    <span id="connected"></span>
-                  </h3>
-                </div>
-          </div>
-        </div>
-      </div>
-  
-      <!-- Make Your Bid -->
-
-  
+      <h1 class="text-center">Rock, Paper, Scissors</h1>
+      <h3 class="text-center">"When you really want someone else to do it."</h3>
     </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="text-center" id="directions">
+          Wait for an opponent and click a button below to see who the RPS gods prefer</h3>
+        <h3 class="text-center">
+          <strong>You are Player Number:</strong>
+          <span id="playerNumber"></span>
+        </h3>
+        <h3 class="text-center">
+            <span id="choice"></span>
+        </h3>
+        <h3 class="text-center">
+          <span id="oppChoice"></span>
+        </h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 text-center mb-2">
+        <button type="button" id="rock" class="btn btn-secondary align-center m-1">
+            <img src="assets/images/rock.jpg">
+        </button>
+        <button type="button" id="paper" class="btn btn-secondary align-center m-1">
+            <img src="assets/images/paper.jpg">
+        </button>
+        <button type="button" id="scissors" class="btn btn-secondary align-center m-1">
+            <img src="assets/images/scissors.jpg">
+        </button>
+      </div>
+    </div>
+    <div class="input-group mb-2">
+      <input type="text" class="form-control" id="smack-input" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+      <button type="submit" class="btn btn-secondary" id="smack-button">Talk some smack, it might help!</button>
+    </div>
+  <div class="row">
+    <div class="col-6 text-center">
+      <h3 class="">
+        <span>Number of Wins:</span>
+        <span id="wins"></span>
+      </h3>
+      <h3 class="">
+        <span>Number of Losses:</span>
+        <span id="losses"></span>
+      </h3>
+      <h3 class="">
+        <span>Number of Ties:</span>
+        <span id="ties"></span>
+      </h3>
+      <h3 class="">
+        <span>Users Connected:</span>
+        <span id="connected"></span>
+      </h3>
+    </div>
+    <div class="col-6">
+      <div id="smack"></div>
+    </div>
+  </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

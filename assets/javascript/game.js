@@ -13,6 +13,7 @@ var playerOneWins = 0
 var playerTwoWins = 0
 var ties = 0
 var DBOutput = []
+var smackTalk = ""
 
 var firebaseConfig = {
   apiKey: "AIzaSyBTC_DEy2hw-WLtbxgQOnLEVIVWKgV1ty4",
@@ -39,8 +40,6 @@ if (snap.val()) {
 }
 });
 
-
-
 connectionsRef.on("value", function(snap) {
   if(playerNumber == 0){
     $("#playerNumber").text(snap.numChildren());
@@ -63,6 +62,7 @@ connectionsRef.on("value", function(snap) {
         playerOneWins: playerOneWins,
         playerTwoWins: playerTwoWins,
         ties: ties,
+        smackTalk: smackTalk,
       });
     }
 });
@@ -71,6 +71,7 @@ database.ref("/gameInfo").on("value", function(snapshot) {
   var p1c = snapshot.child("playerOneChoice").val()
   var p2c = snapshot.child("playerTwoChoice").val()
   DBOutput = snapshot
+  $("#smack").append(snapshot.child("smackTalk").val())
 
   if (choices.includes(p1c) && choices.includes(p2c)){        
     if ((p1c === "Rock" && p2c === "Scissors") ||
@@ -155,12 +156,14 @@ database.ref("/gameInfo").on("value", function(snapshot) {
 function updateDB(){
   if(playerNumber == 1){
     database.ref("/gameInfo").update({
-      playerOneChoice: playerChoice
+      playerOneChoice: playerChoice,
+      smackTalk: smackTalk
     });
   }
   if(playerNumber == 2){
     database.ref("/gameInfo").update({
       playerTwoChoice: playerChoice,
+      smackTalk: smackTalk
     });
   }
 }
@@ -230,3 +233,24 @@ $("#scissors").on("click", function(){
     }
   }
 })
+
+$('#smack-button').on("click", function(event){
+  event.preventDefault();
+  if(playerNumber == 1){
+    smackTalk = "Player 1: " + $('#smack-input').val() + "</br>"
+    }
+  if(playerNumber == 2){
+    smackTalk = "Player 2: " + $('#smack-input').val() + "</br>"
+    }
+  updateDB()
+  $('#smack-input').val('')
+});
+
+$('#smack-input').keypress(function (e) {
+  var key = e.which;
+  if(key == 13)
+   {
+     $('#smack-button').click();
+     return false;  
+   }
+ });

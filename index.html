@@ -7,8 +7,9 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" src="assets/css/style.css">
-   
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+   </head>
+   <body>
     <!-- Jumbotron Title -->
     <div class="jumbotron">
         <h1 class="text-center">Rock, Paper, Scissors</h1>
@@ -17,61 +18,53 @@
   
       <div class="row">
         <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="text-center">
-                Wait for an opponent and click "r", "p", or "s"</h3>
+              <h3 class="text-center" id="directions">
+                Wait for an opponent and click a button below to see who the RPS gods prefer</h3>
+                <h3 class="text-center">
+                  <strong>You are Player Number:</strong>
+                  <span id="playerNumber"></span>
+                </h3>
+                <h3 class="text-center">
+                    <span id="choice"></span>
+                  </h3>
+                  <h3 class="text-center">
+                    <span id="oppChoice"></span>
+                  </h3>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="text-center card-header" id="directions">
-              Choose your destiny
-            </div>
-          </div>
-        </div>
       </div>
       <!-- Current Product -->
       <div class="row">
-        <div class="col-lg-12">
-          <div class="card">
-            <div class="card-body">
+        <div class="col-lg-12 text-center">
+            <button type="button" id="rock" class="btn btn-secondary align-center">
+                <img src="assets/images/rock.jpg">
+            </button>
+            <button type="button" id="paper" class="btn btn-secondary align-center">
+                <img src="assets/images/paper.jpg">
+            </button>
+            <button type="button" id="scissors" class="btn btn-secondary align-center">
+                <img src="assets/images/scissors.jpg">
+            </button>
               <div class="row">
                 <div class="col-lg-12">
+
                   <h3 class="">
-                    <strong>Your Choice:</strong>
-                    <span id="choice"></span>
-                  </h3>
-                  <h3 class="">
-                    <strong>Opponent's Choice:</strong>
-                    <span id="oppChoice"></span>
-                  </h3>
-                  <h3 class="">
-                    <strong>Number of Wins:</strong>
+                    <span>Number of Wins:</span>
                     <span id="wins"></span>
                   </h3>
                   <h3 class="">
-                    <strong>Number of Losses:</strong>
+                    <span>Number of Losses:</span>
                     <span id="losses"></span>
                   </h3>
                   <h3 class="">
-                    <strong>Number of Ties:</strong>
+                    <span>Number of Ties:</span>
                     <span id="ties"></span>
                   </h3>
+
                   <h3 class="">
-                    <strong>You are Player Number:</strong>
-                    <span id="playerNumber"></span>
-                  </h3>
-                  <h3 class="">
-                    <strong>Users Connected:</strong>
+                    <span>Users Connected:</span>
                     <span id="connected"></span>
                   </h3>
                 </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

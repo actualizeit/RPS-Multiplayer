@@ -1,4 +1,4 @@
-# RPS-Multiplayer
+# Now you can play rock paper scissors while having a flame war. You're welcome.
 
 Dude I really don't wanna take out the trash. Let's play for it.
 

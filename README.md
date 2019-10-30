@@ -2,7 +2,7 @@
 
 Dude I really don't wanna take out the trash. Let's play for it. One, two three shoot!
 
-https://actualizeit.github.io/RPS-Multiplayer/
+Link to deployed site: https://actualizeit.github.io/RPS-Multiplayer/
 
 ## Getting Started
 

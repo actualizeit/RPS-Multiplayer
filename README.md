@@ -2,6 +2,8 @@
 
 Dude I really don't wanna take out the trash. Let's play for it. One, two three shoot!
 
+https://actualizeit.github.io/RPS-Multiplayer/
+
 ## Getting Started
 
 Click one of the buttons to pick rock, paper or scissors. Once another player joins and makes a selection it will determine who won and keep track of wins losses and ties.
